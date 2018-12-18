@@ -2,6 +2,8 @@ package com.fdmgroup.shoppingcart.controllers;
 
 
 import com.fdmgroup.shoppingcart.models.Item;
+import com.fdmgroup.shoppingcart.repositories.ItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,24 +17,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/bikes")
+@RequestMapping("api/v1/items")
 public class ItemsController {
+
+    @Autowired
+    ItemRepository itemRepository;
 
     @GetMapping
     public List<Item> list(){
-        List<Item> items = new ArrayList<>();
-        return items;
+        return itemRepository.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void create(@RequestBody Item item){
-
+        itemRepository.save(item);
     }
 
     @GetMapping("{/id}")
     public Item get(@PathVariable("id") long id){
-        return new Item();
+        return itemRepository.getOne(id);
     }
 
 
